@@ -6,58 +6,75 @@ function computerPlay()
 {
     return Math.floor(Math.random()*3)
 }
-function playRound(playerSelection, computerSelection) 
+function playRound() 
 {
+    if(playerScore+computerScore == 5){
+        playerScore = 0;
+        computerScore = 0;
+        score.style.color = "black";
+    }
+
+    const computerSelection = computerPlay();
+    let playerSelection = options.indexOf(this.id);
+
     if(playerSelection == computerSelection){
-        console.log(`It's a tie! You both choose ${options[playerSelection]}`)
+        message.textContent = `It's a tie! You both choose ${options[playerSelection]}`
+        message.style.color = "blue";
     }
     else if(playerSelection == 0 && computerSelection == 2){
-        console.log(`${options[playerSelection]} beats ${options[computerSelection]}. You get a point`)
+        message.textContent = `${options[playerSelection]} beats ${options[computerSelection]}. You get a point`
         playerScore++;
+        message.style.color = "green";
     }
     else if(playerSelection == 2 && computerSelection == 0){
-        console.log(`${options[computerSelection]} beats ${options[playerSelection]}. Computer gets a point`)
+        message.textContent = `${options[computerSelection]} beats ${options[playerSelection]}. Computer gets a point`
         computerScore++;
+        message.style.color = "red";
     }
     else{
         if(playerSelection > computerSelection){
-            console.log(`${options[playerSelection]} beats ${options[computerSelection]}. You get a point`)
+            message.textContent = `${options[playerSelection]} beats ${options[computerSelection]}. You get a point`
             playerScore++;
+            message.style.color = "green";
         }
         else{
-            console.log(`${options[computerSelection]} beats ${options[playerSelection]}. Computer gets a point`)
+            message.textContent = `${options[computerSelection]} beats ${options[playerSelection]}. Computer gets a point`
             computerScore++;
+            message.style.color = "red";
         }
     }
-}
+    score.textContent = `${playerScore} - ${computerScore}`;
 
-function game()
-{
-
-    const computerSelection = computerPlay();
-    let playerSelection = parseInt(window.prompt("Type \"1\" to play Rock, \"2\" to play Paper or \"3\" to play Scissors:"))
-
-    while(playerSelection !== 1 && playerSelection !== 2 && playerSelection !== 3)
-    {
-        alert("Wrong input, please choose a number between 1 and 3.")
-        playerSelection = parseInt(window.prompt("Type \"1\" to play Rock, \"2\" to play Paper or \"3\" to play Scissors:"))
+    if(playerScore+computerScore == 5){
+        results();
     }
-    playerSelection -= 1;
-
-    playRound(playerSelection, computerSelection)
 }
 
 function results()
 {
-    if(playerScore > computerScore) console.log(`Congratulations, you win! Score: ${playerScore}-${computerScore}`)
-    else if(computerScore > playerScore) console.log(`You loose. Score: ${playerScore}-${computerScore}`)
-    else console.log(`Game results in a tie: ${playerScore}-${computerScore}`)
-}
+    if(playerScore > computerScore) {
+        message.textContent = `Congratulations, you win!`;
+        message.style.color = "gold";
+        score.style.color = "green";
+    }
+    else if(computerScore > playerScore) {
+        message.textContent = `You loose`;
+        message.style.color = "black";
+        score.style.color = "red";
+    }
 
-for(let i=0; i<5; i++) 
-{
-    game()
 }
-    
-results()
+const UI = document.querySelector("#UI");
+let score = document.createElement("h1");
+score.id = "score";
+score.textContent = "0 - 0";
+
+let message = document.createElement("p");
+message.id = "message";
+
+UI.appendChild(score);
+UI.appendChild(message);
+
+const buttons = document.querySelectorAll(".btn");
+buttons.forEach(button => button.addEventListener("click", playRound));
 
